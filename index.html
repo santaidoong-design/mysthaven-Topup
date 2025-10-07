@@ -1,0 +1,346 @@
+<!doctype html>
+
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>MYSTHAVEN TOPUP</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    body { padding-top: 70px; background:#f8f9fa; }
+    .card-img-top { object-fit: cover; height: 160px; }
+    .category-hero { height:140px; object-fit:cover; width:100%; border-radius:6px; }
+    .price { font-weight:700; }
+    .small-muted { font-size:.85rem; color:#666; }
+    .badge-stock { font-size:.72rem; }
+    footer { margin-top:40px }
+    .product-desc { font-size: .9rem; color:#444; }
+  </style>
+</head>
+<body>
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+    <div class="container">
+      <a class="navbar-brand" href="#">MYSTHAVEN TOPUP</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#nav">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="nav">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item"><a class="nav-link" href="#catalog">Produk</a></li>
+          <li class="nav-item"><a class="nav-link" href="#checkout">Checkout</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>  <header class="py-4 bg-white shadow-sm">
+    <div class="container d-flex align-items-center justify-content-between">
+      <div>
+        <h1 class="h4 mb-1">MYSTHAVEN TOPUP</h1>
+        <div class="small-muted">Topup & paket donasi server — Checkout via WhatsApp</div>
+      </div>
+      <div>
+        <button id="cartBtn" class="btn btn-outline-primary">Keranjang (<span id="cartCount">0</span>)</button>
+      </div>
+    </div>
+  </header>  <main class="container my-4" id="catalog"><!-- Categories will render here -->
+<div id="categories"></div>
+
+  </main>  <!-- Cart / Checkout Modal -->  <div class="modal fade" id="cartModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Keranjang Belanja</h5>
+          <button class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <div id="cartItems"></div>
+          <div class="mt-3 d-flex justify-content-between align-items-center">
+            <strong>Total: Rp <span id="cartTotal">0</span></strong>
+            <div>
+              <button class="btn btn-secondary me-2" id="clearCartBtn">Kosongkan</button>
+              <button class="btn btn-primary" id="checkoutBtn">Checkout</button>
+            </div>
+          </div><hr>
+
+      <div id="checkoutSection" style="display:none">
+        <h6>Isi data untuk checkout</h6>
+        <form id="checkoutForm">
+          <div class="mb-2">
+            <input class="form-control" required id="customerName" placeholder="Nama / Nick in game">
+          </div>
+          <div class="mb-2">
+            <input class="form-control" required id="gameId" placeholder="ID Game / UID">
+          </div>
+          <div class="mb-2">
+            <input class="form-control" required id="phone" placeholder="Nomor HP (WhatsApp, contoh 0812...)">
+          </div>
+          <div class="mb-2">
+            <select class="form-select" id="paymentMethod" required>
+              <option value="">Pilih Metode Pembayaran</option>
+              <option>Transfer Bank</option>
+              <option>Dana</option>
+              <option>OVO</option>
+              <option>Gopay</option>
+            </select>
+          </div>
+          <div class="mb-2">
+            <textarea class="form-control" id="notes" placeholder="Catatan (opsional)"></textarea>
+          </div>
+          <div class="d-flex justify-content-between">
+            <button type="submit" class="btn btn-success">Konfirmasi & Kirim ke WhatsApp</button>
+            <button type="button" class="btn btn-outline-secondary" id="backBtn">Kembali</button>
+          </div>
+        </form>
+        <p class="mt-2 small text-muted">Setelah konfirmasi, halaman WhatsApp akan terbuka untuk mengirimkan pesan order ke toko.</p>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+  </div>  <footer class="container text-center py-4">
+    <div class="small-muted">© MYSTHAVEN TOPUP</div>
+  </footer>  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>  <script>
+    // ====== CONFIG ======
+    const WA_NUMBER = '6282178341723'; // nomor tujuan (international, tanpa +)
+
+    // Category images (dari user)
+    const categoryImages = {
+      house: 'https://raw.githubusercontent.com/santaidoong-design/SOF-Database.sql/refs/heads/main/gta-sa-error-100%25-completion-hydra-tidak-spawn-di-ganton.jpg',
+      workshop: 'https://raw.githubusercontent.com/santaidoong-design/SOF-Database.sql/refs/heads/main/20251007_072942.jpg',
+      vip: 'https://raw.githubusercontent.com/santaidoong-design/SOF-Database.sql/refs/heads/main/images%20(17).jpeg',
+      gold: 'https://raw.githubusercontent.com/santaidoong-design/SOF-Database.sql/refs/heads/main/images%20(18).jpeg',
+      others: 'https://raw.githubusercontent.com/santaidoong-design/SOF-Database.sql/refs/heads/main/20251007_091700.jpg'
+    };
+
+    // ====== PRODUCTS (lengkap sesuai list user) ======
+    // Each product: id, category, title, price (number, rupiah), desc, img (optional)
+    const products = [
+      // HARGA ALL BISNIS
+      { id:'allbiz', category:'Business', title:'HARGA ALL BISNIS', price:50000, desc:'Harga referensi: 50K', img: categoryImages.others },
+
+      // HOUSE LIST
+      { id:'house_small', category:'House List', title:'SMAIL (Small)', price:20000, desc:'House Small', img: categoryImages.house },
+      { id:'house_medium', category:'House List', title:'Medium', price:30000, desc:'House Medium', img: categoryImages.house },
+      { id:'house_large', category:'House List', title:'Large', price:50000, desc:'House Large', img: categoryImages.house },
+
+      // WORKSHOP LIST
+      { id:'ws_objek_75', category:'Workshop List', title:'Ws objek 75 (bukan dari server)', price:80000, desc:'Workshop objek 75, non-server', img: categoryImages.workshop },
+      { id:'ws_objek_server', category:'Workshop List', title:'Ws objek dari server', price:50000, desc:'Workshop objek dari server', img: categoryImages.workshop },
+
+      // PACKET LIST - Packages
+      { id:'pkg_basic', category:'Packet List', title:'BASIC PACKAGE', price:50000, desc:`Received money: 25.000$\nVIP: Basic 1 month\nGold points: 3000\nHouse: Medium (Logic & Unoccupied)\nLevel +4\nDiscord role donater` , img: categoryImages.others },
+      { id:'pkg_advance', category:'Packet List', title:'ADVANCE PACKAGE', price:100000, desc:`Received money: 50.000$\nVIP: Advance 1 month\nGold: 4000\nHouse: Medium\nImport vehicle (1)\nLevel +7\nSkin import\nDiscord role donater`, img: categoryImages.others },
+      { id:'pkg_pro', category:'Packet List', title:'PROFFESIONAL PACKAGE', price:200000, desc:`Received money: 60.000$\nVIP: Profesional 1 month\nGold: 8000\nHouse: Large\nBusiness All Type\nImport vehicle (1)\nLevel +8\nVending Machine 1\n1 Suite apartment permanent`, img: categoryImages.others },
+      { id:'pkg_complete', category:'Packet List', title:'COMPLETE PACKAGE', price:500000, desc:`Received money: 250.000$\nVIP: Vip Custom (Selamanya)\nGold: 10000\nHouse: Mansion\nDealer All Type\nBusiness All Type\nPfarm, Gas Station, Workshop, Vending, ATM\nImport vehicle 1 of all\nLevel +10\n1 Suite apartment permanent\nFree mapping 85 object\nBisa mining coin dan mendapatkan gold`, img: categoryImages.others },
+
+      // LEVEL
+      { id:'lvl_3', category:'Level', title:'+3 Level', price:15000, desc:'+3 Level (non-permanent)', img: categoryImages.others },
+      { id:'lvl_6', category:'Level', title:'+6 Level', price:35000, desc:'+6 Level', img: categoryImages.others },
+      { id:'lvl_8', category:'Level', title:'+8 Level', price:40000, desc:'+8 Level', img: categoryImages.others },
+
+      // VIP 1 month
+      { id:'vip_basic_1m', category:'VIP (1 month)', title:'VIP BASIC 1 month', price:20000, desc:'Slot rumah+1, Slot kendaraan+1, Slot Business+1, akses /ad,/vchat,/vips, Role donatur', img: categoryImages.vip },
+      { id:'vip_advance_1m', category:'VIP (1 month)', title:'VIP ADVANCE 1 month', price:35000, desc:'Slot rumah+2, Slot kendaraan+2, Slot Business+2, akses /ad,/vchat,/vips, Role donatur', img: categoryImages.vip },
+
+      // VIP Permanent
+      { id:'vip_basic_perm', category:'VIP Permanent', title:'VIP BASIC Permanent', price:50000, desc:'Slot rumah+1, kendaraan+1, business+1, akses /ad,/vchat,/vips, Role donatur', img: categoryImages.vip },
+      { id:'vip_advance_perm', category:'VIP Permanent', title:'VIP ADVANCE Permanent', price:65000, desc:'Slot rumah+2, kendaraan+2, business+2, akses /ad,/vchat,/vips, Role donatur', img: categoryImages.vip },
+      { id:'vip_prof_perm', category:'VIP Permanent', title:'VIP PROFFESIONAL Permanent', price:100000, desc:'Slot rumah+3, kendaraan+2, business+2, akses /ad,/vchat,/vips, Role donatur', img: categoryImages.vip },
+      { id:'vip_diamond_perm', category:'VIP Permanent', title:'VIP diamond Permanent', price:200000, desc:'Slot rumah+10, kendaraan+10, business+10, akses lengkap, role vip lifetime, 1 Suite apartment permanent, Bisa mining coin', img: categoryImages.vip },
+
+      // GOLD
+      { id:'gold_1000', category:'Gold', title:'1000 Gold', price:5000, desc:'1000 Gold', img: categoryImages.gold },
+      { id:'gold_2050', category:'Gold', title:'2050 Gold', price:15000, desc:'2050 Gold', img: categoryImages.gold },
+      { id:'gold_3100', category:'Gold', title:'3100 Gold', price:20000, desc:'3100 Gold', img: categoryImages.gold },
+      { id:'gold_4150', category:'Gold', title:'4150 Gold', price:30000, desc:'4150 Gold', img: categoryImages.gold },
+      { id:'gold_5200', category:'Gold', title:'5200 Gold', price:40000, desc:'5200 Gold', img: categoryImages.gold },
+      { id:'gold_15500', category:'Gold', title:'15500 Gold', price:65000, desc:'15500 Gold', img: categoryImages.gold },
+
+      // GATE
+      { id:'gate_1', category:'Gate', title:'1 GATE', price:25000, desc:'1 Gate', img: categoryImages.others },
+      { id:'gate_2', category:'Gate', title:'2 GATE', price:40000, desc:'2 Gate', img: categoryImages.others },
+
+      // VENDING MACHINE
+      { id:'vending', category:'Vending Machine', title:'Vending Machine (All Location)', price:35000, desc:'Dapat dijual secara IC', img: categoryImages.others },
+
+      // GAS STATION
+      { id:'gas_station', category:'Gas Station', title:'Gas Station (All Location Logic)', price:50000, desc:'Stock 5000 dari server, Free 20 Object mapping', img: categoryImages.others },
+
+      // PRIVATE FARM
+      { id:'pfarm', category:'Private Farm', title:'Private Farm (All Location Logic)', price:50000, desc:'Stock 1000 seed dari server', img: categoryImages.others },
+
+      // BUSINESS GYM
+      { id:'business_gym', category:'Business', title:'Business Gym (All Location Logic)', price:50000, desc:'Stock 500', img: categoryImages.others },
+
+      // BUSINESS AMMUNATION
+      { id:'business_ammun', category:'Business', title:'Business Ammunation (All Location Logic)', price:65000, desc:'Stock 50, Profit up to $1.000.000', img: categoryImages.others },
+
+      // ATM
+      { id:'atm', category:'ATM', title:'ATM (All Location Logic)', price:30000, desc:'ATM available', img: categoryImages.others },
+
+      // DEALER
+      { id:'dealer', category:'Dealer', title:'Dealer (All Location Logic)', price:50000, desc:'Dealer All Type', img: categoryImages.others }
+    ];
+
+    // group products by category
+    function groupBy(arr, key){
+      return arr.reduce((acc, item)=>{
+        (acc[item[key]] = acc[item[key]] || []).push(item);
+        return acc;
+      }, {});
+    }
+
+    const grouped = groupBy(products, 'category');
+
+    // render categories
+    const categoriesEl = document.getElementById('categories');
+    for(const [cat, items] of Object.entries(grouped)){
+      const catId = cat.toLowerCase().replace(/[^a-z0-9]+/g,'-');
+      const img = (cat.toLowerCase().includes('house')?categoryImages.house:
+                  (cat.toLowerCase().includes('workshop')?categoryImages.workshop:
+                  (cat.toLowerCase().includes('vip')?categoryImages.vip:
+                  (cat.toLowerCase().includes('gold')?categoryImages.gold:categoryImages.others))));
+
+      const section = document.createElement('section');
+      section.className = 'mb-5';
+      section.innerHTML = `
+        <div class="card p-3 mb-3">
+          <div class="d-flex gap-3 align-items-center">
+            <img src="${img}" alt="${cat}" class="category-hero me-3" style="width:220px; height:110px;">
+            <div>
+              <h3 class="mb-1">${cat}</h3>
+              <div class="small-muted">${items.length} produk</div>
+            </div>
+          </div>
+        </div>
+        <div class="row g-3" id="cat-${catId}"></div>
+      `;
+      categoriesEl.appendChild(section);
+
+      const grid = section.querySelector('#cat-'+catId);
+      items.forEach(p=>{
+        const col = document.createElement('div'); col.className='col-12 col-sm-6 col-md-4 col-lg-3';
+        col.innerHTML = `
+          <div class="card h-100 shadow-sm">
+            <img src="${p.img || categoryImages.others}" class="card-img-top" alt="${p.title}">
+            <div class="card-body d-flex flex-column">
+              <h5 class="card-title mb-1">${p.title}</h5>
+              <div class="small-muted mb-2 product-desc">${p.desc.replace(/\n/g,'<br>')}</div>
+              <div class="mt-auto d-flex justify-content-between align-items-center">
+                <div>
+                  <div class="price">Rp ${formatRp(p.price)}</div>
+                </div>
+                <div class="d-flex gap-2">
+                  <input class="form-control form-control-sm qty-input" type="number" min="1" value="1" style="width:70px" data-id="${p.id}">
+                  <button class="btn btn-primary btn-sm addBtn" data-id="${p.id}">Tambah</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        `;
+        grid.appendChild(col);
+      });
+    }
+
+    // utils
+    function formatRp(n){ return n.toString().replace(/\B(?=(\d{3})+(?!\d))/g,'.'); }
+
+    // CART (localStorage)
+    const CART_KEY = 'mysthaven_cart_v1';
+    const cartModal = new bootstrap.Modal(document.getElementById('cartModal'));
+    const cartCountEl = document.getElementById('cartCount');
+    const cartItemsEl = document.getElementById('cartItems');
+    const cartTotalEl = document.getElementById('cartTotal');
+    const checkoutSection = document.getElementById('checkoutSection');
+
+    function getCart(){ return JSON.parse(localStorage.getItem(CART_KEY) || '[]'); }
+    function saveCart(c){ localStorage.setItem(CART_KEY, JSON.stringify(c)); updateCartUI(); }
+
+    function updateCartUI(){
+      const cart = getCart();
+      cartCountEl.textContent = cart.reduce((s,i)=>s+i.qty,0);
+      cartItemsEl.innerHTML = '';
+      if(cart.length===0) cartItemsEl.innerHTML = '<p class="text-muted">Keranjang kosong.</p>';
+      let total = 0;
+      cart.forEach(item=>{
+        const prod = products.find(p=>p.id===item.id);
+        const sub = prod.price * item.qty;
+        total += sub;
+        const row = document.createElement('div');
+        row.className = 'd-flex align-items-center justify-content-between mb-2 border-bottom pb-2';
+        row.innerHTML = `
+          <div>
+            <strong>${prod.title}</strong><br>
+            Rp ${formatRp(prod.price)} x ${item.qty} = Rp ${formatRp(sub)}
+          </div>
+          <div>
+            <button class="btn btn-sm btn-outline-secondary btn-decrease" data-id="${item.id}">-</button>
+            <button class="btn btn-sm btn-outline-danger btn-remove" data-id="${item.id}">x</button>
+          </div>`;
+        cartItemsEl.appendChild(row);
+      });
+      cartTotalEl.textContent = formatRp(total);
+    }
+
+    // add to cart handlers
+    document.addEventListener('click', e=>{
+      if(e.target.classList.contains('addBtn')){
+        const id = e.target.dataset.id;
+        const qtyInput = document.querySelector('.qty-input[data-id="'+id+'"]');
+        const qty = Math.max(1, Math.min(parseInt(qtyInput.value||1), 1000));
+        const cart = getCart();
+        const existing = cart.find(c=>c.id===id);
+        if(existing) existing.qty += qty; else cart.push({id, qty});
+        saveCart(cart);
+        alert('Produk ditambahkan ke keranjang');
+      }
+      if(e.target.id === 'cartBtn'){
+        updateCartUI(); cartModal.show();
+      }
+      if(e.target.classList.contains('btn-remove')){
+        const id = e.target.dataset.id;
+        let cart = getCart(); cart = cart.filter(c=>c.id!==id); saveCart(cart);
+      }
+      if(e.target.classList.contains('btn-decrease')){
+        const id = e.target.dataset.id; const cart = getCart(); const item = cart.find(c=>c.id===id);
+        if(item){ item.qty -=1; if(item.qty<=0){ const idx=cart.findIndex(c=>c.id===id); cart.splice(idx,1); } saveCart(cart); }
+      }
+    });
+
+    document.getElementById('clearCartBtn').addEventListener('click', ()=>{ if(confirm('Kosongkan keranjang?')) saveCart([]); });
+
+    document.getElementById('checkoutBtn').addEventListener('click', ()=>{ const cart = getCart(); if(cart.length===0){ alert('Keranjang kosong'); return; } checkoutSection.style.display='block'; });
+    document.getElementById('backBtn').addEventListener('click', ()=>{ checkoutSection.style.display='none'; });
+
+    document.getElementById('checkoutForm').addEventListener('submit', ev=>{
+      ev.preventDefault();
+      const name = document.getElementById('customerName').value.trim();
+      const gameId = document.getElementById('gameId').value.trim();
+      const phone = document.getElementById('phone').value.trim();
+      const payment = document.getElementById('paymentMethod').value;
+      const notes = document.getElementById('notes').value.trim();
+      const cart = getCart();
+      if(cart.length===0){ alert('Keranjang kosong'); return; }
+
+      let total = 0;
+      let msg = `Order TopUp MYSTHAVEN%0AName: ${encodeURIComponent(name)}%0AID: ${encodeURIComponent(gameId)}%0APhone: ${encodeURIComponent(phone)}%0A%0AProducts:%0A`;
+      cart.forEach(item=>{
+        const prod = products.find(p=>p.id===item.id);
+        const sub = prod.price * item.qty; total += sub;
+        msg += `${encodeURIComponent(prod.title)} - ${item.qty} x Rp ${formatRp(prod.price)} = Rp ${formatRp(sub)}%0A`;
+      });
+      msg += `%0ATotal: Rp ${formatRp(total)}%0AMethod: ${encodeURIComponent(payment)}%0ANotes: ${encodeURIComponent(notes)}`;
+
+      const waUrl = `https://wa.me/${WA_NUMBER}?text=${msg}`;
+      window.open(waUrl, '_blank');
+      saveCart([]);
+      cartModal.hide();
+      alert('WhatsApp terbuka. Selesaikan pengiriman pesan dan konfirmasi pembayaran.');
+    });
+
+    // init
+    updateCartUI();
+    document.getElementById('cartBtn').addEventListener('click', ()=>{ updateCartUI(); cartModal.show(); });
+
+  </script></body>
+</html>
