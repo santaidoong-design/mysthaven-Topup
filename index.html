@@ -1,116 +1,208 @@
 <!DOCTYPE html><html lang="id">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>MYSTHAVEN TOPUP</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <style>
-    body {
-      background-color: #f8f9fa;
-      font-family: 'Poppins', sans-serif;
-    }
-    .category-card img {
-      border-radius: 1rem;
-      height: 180px;
-      object-fit: cover;
-    }
-    .product-item {
-      background: #fff;
-      border-radius: 1rem;
-      padding: 12px 18px;
-      margin-bottom: 10px;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.05);
-    }
-    .whatsapp-btn {
-      background-color: #25d366;
-      color: white;
-      border: none;
-      border-radius: 8px;
-      padding: 8px 14px;
-    }
+    body { background:#f8f9fa; font-family: Inter, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial; }
+    .category-hero { height:150px; object-fit:cover; border-radius:8px; }
+    .cat-card { background: #fff; border-radius: 10px; padding:16px; box-shadow: 0 6px 18px rgba(0,0,0,0.04); }
+    .product-row { display:flex; justify-content:space-between; align-items:center; padding:10px 0; border-bottom:1px solid #f1f1f1; }
+    .product-row:last-child{ border-bottom: none; }
+    .price { font-weight:700; }
+    .btn-buy { background:#0a84ff; color:#fff; border:none; }
+    .btn-buy:active{ transform: translateY(1px); }
+    .small-muted{ color:#6b7280; }
   </style>
 </head>
 <body>
   <div class="container py-4">
-    <h2 class="text-center mb-4 fw-bold text-primary">💎 MYSTHAVEN TOPUP 💎</h2>
-    <p class="text-center">Nomor WhatsApp: <strong>082178341723</strong></p><!-- House Category -->
-<div class="category-card mb-4">
-  <img src="https://raw.githubusercontent.com/santaidoong-design/SOF-Database.sql/refs/heads/main/gta-sa-error-100%25-completion-hydra-tidak-spawn-di-ganton.jpg" class="img-fluid mb-3" alt="House">
-  <h4 class="fw-bold text-secondary">🏠 House</h4>
-  <div class="product-item d-flex justify-content-between align-items-center">
-    <span>House LV 1</span>
-    <button class="whatsapp-btn" onclick="order('House LV 1', 'Rp10.000')">Beli</button>
+    <header class="d-flex align-items-center justify-content-between mb-4">
+      <div>
+        <h2 class="mb-0">MYSTHAVEN TOPUP</h2>
+        <div class="small-muted">Checkout via WhatsApp • Nomor: <strong>082178341723</strong></div>
+      </div>
+      <div>
+        <a class="btn btn-outline-secondary" href="#">Hubungi Admin</a>
+      </div>
+    </header><div class="row g-4">
+  <!-- House -->
+  <div class="col-12 col-md-6">
+    <div class="cat-card">
+      <img class="category-hero mb-3" src="https://raw.githubusercontent.com/santaidoong-design/SOF-Database.sql/refs/heads/main/gta-sa-error-100%25-completion-hydra-tidak-spawn-di-ganton.jpg" alt="House">
+      <div class="d-flex justify-content-between align-items-center mb-2">
+        <h5 class="mb-0">🏠 House</h5>
+        <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#modal-house">Lihat Harga</button>
+      </div>
+      <p class="small-muted mb-0">Pilihan house: Small, Medium, Large — klik "Lihat Harga" untuk daftar lengkap.</p>
+    </div>
   </div>
-  <div class="product-item d-flex justify-content-between align-items-center">
-    <span>House LV 2</span>
-    <button class="whatsapp-btn" onclick="order('House LV 2', 'Rp20.000')">Beli</button>
+
+  <!-- Workshop -->
+  <div class="col-12 col-md-6">
+    <div class="cat-card">
+      <img class="category-hero mb-3" src="https://raw.githubusercontent.com/santaidoong-design/SOF-Database.sql/refs/heads/main/20251007_072942.jpg" alt="Workshop">
+      <div class="d-flex justify-content-between align-items-center mb-2">
+        <h5 class="mb-0">🔧 Workshop</h5>
+        <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#modal-workshop">Lihat Harga</button>
+      </div>
+      <p class="small-muted mb-0">Workshop: satu harga utama (detail di modal).</p>
+    </div>
   </div>
+
+  <!-- VIP -->
+  <div class="col-12 col-md-6">
+    <div class="cat-card">
+      <img class="category-hero mb-3" src="https://raw.githubusercontent.com/santaidoong-design/SOF-Database.sql/refs/heads/main/images%20(17).jpeg" alt="VIP">
+      <div class="d-flex justify-content-between align-items-center mb-2">
+        <h5 class="mb-0">👑 VIP</h5>
+        <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#modal-vip">Lihat Harga</button>
+      </div>
+      <p class="small-muted mb-0">VIP tersedia 1 bulan & permanent — klik untuk lihat semua varian dan harga.</p>
+    </div>
+  </div>
+
+  <!-- Gold -->
+  <div class="col-12 col-md-6">
+    <div class="cat-card">
+      <img class="category-hero mb-3" src="https://raw.githubusercontent.com/santaidoong-design/SOF-Database.sql/refs/heads/main/images%20(18).jpeg" alt="Gold">
+      <div class="d-flex justify-content-between align-items-center mb-2">
+        <h5 class="mb-0">💰 Gold</h5>
+        <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#modal-gold">Lihat Harga</button>
+      </div>
+      <p class="small-muted mb-0">Gold packs tersedia dengan beberapa pilihan. Lihat daftar lengkap.</p>
+    </div>
+  </div>
+
+  <!-- Special Bundle -->
+  <div class="col-12 col-md-6">
+    <div class="cat-card">
+      <img class="category-hero mb-3" src="https://raw.githubusercontent.com/santaidoong-design/SOF-Database.sql/refs/heads/main/20251007_091700.jpg" alt="Special">
+      <div class="d-flex justify-content-between align-items-center mb-2">
+        <h5 class="mb-0">🛍️ Special Bundle</h5>
+        <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#modal-special">Lihat Harga</button>
+      </div>
+      <p class="small-muted mb-0">Bundle spesial dan penawaran khusus.</p>
+    </div>
+  </div>
+
+  <!-- Exclusive Item -->
+  <div class="col-12 col-md-6">
+    <div class="cat-card">
+      <img class="category-hero mb-3" src="https://raw.githubusercontent.com/santaidoong-design/SOF-Database.sql/refs/heads/main/20251007_091700.jpg" alt="Exclusive">
+      <div class="d-flex justify-content-between align-items-center mb-2">
+        <h5 class="mb-0">✨ Exclusive Item</h5>
+        <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#modal-exclusive">Lihat Harga</button>
+      </div>
+      <p class="small-muted mb-0">Item eksklusif limited stock — klik untuk detail dan beli.</p>
+    </div>
+  </div>
+
 </div>
 
-<!-- Workshop Category -->
-<div class="category-card mb-4">
-  <img src="https://raw.githubusercontent.com/santaidoong-design/SOF-Database.sql/refs/heads/main/20251007_072942.jpg" class="img-fluid mb-3" alt="Workshop">
-  <h4 class="fw-bold text-secondary">⚙️ Workshop</h4>
-  <div class="product-item d-flex justify-content-between align-items-center">
-    <span>Workshop Basic</span>
-    <button class="whatsapp-btn" onclick="order('Workshop Basic', 'Rp15.000')">Beli</button>
-  </div>
-  <div class="product-item d-flex justify-content-between align-items-center">
-    <span>Workshop Advanced</span>
-    <button class="whatsapp-btn" onclick="order('Workshop Advanced', 'Rp30.000')">Beli</button>
-  </div>
-</div>
+<footer class="text-center mt-5 small-muted">© 2025 MYSTHAVEN TOPUP</footer>
 
-<!-- VIP Category -->
-<div class="category-card mb-4">
-  <img src="https://raw.githubusercontent.com/santaidoong-design/SOF-Database.sql/refs/heads/main/images%20(17).jpeg" class="img-fluid mb-3" alt="VIP">
-  <h4 class="fw-bold text-secondary">👑 VIP</h4>
-  <div class="product-item d-flex justify-content-between align-items-center">
-    <span>VIP Bronze</span>
-    <button class="whatsapp-btn" onclick="order('VIP Bronze', 'Rp50.000')">Beli</button>
-  </div>
-  <div class="product-item d-flex justify-content-between align-items-center">
-    <span>VIP Diamond</span>
-    <button class="whatsapp-btn" onclick="order('VIP Diamond', 'Rp200.000')">Beli</button>
-  </div>
-</div>
+  </div>  <!-- MODALS -->  <!-- House Modal -->  <div class="modal fade" id="modal-house" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">House - Daftar Harga</h5>
+          <button class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <div class="product-row"><div>Small</div><div class="price">Rp 20.000</div><div><button class="btn btn-sm btn-buy" onclick="buy('House - Small','20000')">Beli</button></div></div>
+          <div class="product-row"><div>Medium</div><div class="price">Rp 30.000</div><div><button class="btn btn-sm btn-buy" onclick="buy('House - Medium','30000')">Beli</button></div></div>
+          <div class="product-row"><div>Large</div><div class="price">Rp 50.000</div><div><button class="btn btn-sm btn-buy" onclick="buy('House - Large','50000')">Beli</button></div></div>
+        </div>
+      </div>
+    </div>
+  </div>  <!-- Workshop Modal (single price shown) -->  <div class="modal fade" id="modal-workshop" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Workshop - Harga</h5>
+          <button class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <p>Harga utama: <strong class="price">Rp 50.000</strong></p>
+          <p class="small-muted">Catatan: Untuk "Ws objek 75 bukan dari server" harga Rp 80.000 (pesan via WhatsApp jika butuh non-server).</p>
+          <div class="text-end"><button class="btn btn-buy" onclick="buy('Workshop','50000')">Beli Workshop</button></div>
+        </div>
+      </div>
+    </div>
+  </div>  <!-- VIP Modal -->  <div class="modal fade" id="modal-vip" tabindex="-1">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">VIP - Daftar Harga</h5>
+          <button class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <div class="product-row"><div>VIP BASIC 1 month</div><div class="price">Rp 20.000</div><div><button class="btn btn-sm btn-buy" onclick="buy('VIP BASIC 1 month','20000')">Beli</button></div></div>
+          <div class="product-row"><div>VIP ADVANCE 1 month</div><div class="price">Rp 35.000</div><div><button class="btn btn-sm btn-buy" onclick="buy('VIP ADVANCE 1 month','35000')">Beli</button></div></div>
+          <hr>
+          <div class="product-row"><div>VIP BASIC Permanent</div><div class="price">Rp 50.000</div><div><button class="btn btn-sm btn-buy" onclick="buy('VIP BASIC Permanent','50000')">Beli</button></div></div>
+          <div class="product-row"><div>VIP ADVANCE Permanent</div><div class="price">Rp 65.000</div><div><button class="btn btn-sm btn-buy" onclick="buy('VIP ADVANCE Permanent','65000')">Beli</button></div></div>
+          <div class="product-row"><div>VIP PROFFESIONAL Permanent</div><div class="price">Rp 100.000</div><div><button class="btn btn-sm btn-buy" onclick="buy('VIP PROFFESIONAL Permanent','100000')">Beli</button></div></div>
+          <div class="product-row"><div>VIP DIAMOND Permanent</div><div class="price">Rp 200.000</div><div><button class="btn btn-sm btn-buy" onclick="buy('VIP DIAMOND Permanent','200000')">Beli</button></div></div>
+        </div>
+      </div>
+    </div>
+  </div>  <!-- GOLD Modal -->  <div class="modal fade" id="modal-gold" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Gold - Daftar Harga</h5>
+          <button class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <div class="product-row"><div>1000 Gold</div><div class="price">Rp 5.000</div><div><button class="btn btn-sm btn-buy" onclick="buy('1000 Gold','5000')">Beli</button></div></div>
+          <div class="product-row"><div>2050 Gold</div><div class="price">Rp 15.000</div><div><button class="btn btn-sm btn-buy" onclick="buy('2050 Gold','15000')">Beli</button></div></div>
+          <div class="product-row"><div>3100 Gold</div><div class="price">Rp 20.000</div><div><button class="btn btn-sm btn-buy" onclick="buy('3100 Gold','20000')">Beli</button></div></div>
+          <div class="product-row"><div>4150 Gold</div><div class="price">Rp 30.000</div><div><button class="btn btn-sm btn-buy" onclick="buy('4150 Gold','30000')">Beli</button></div></div>
+          <div class="product-row"><div>5200 Gold</div><div class="price">Rp 40.000</div><div><button class="btn btn-sm btn-buy" onclick="buy('5200 Gold','40000')">Beli</button></div></div>
+          <div class="product-row"><div>15500 Gold</div><div class="price">Rp 65.000</div><div><button class="btn btn-sm btn-buy" onclick="buy('15500 Gold','65000')">Beli</button></div></div>
+        </div>
+      </div>
+    </div>
+  </div>  <!-- Special Modal -->  <div class="modal fade" id="modal-special" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Special Bundle - Harga</h5>
+          <button class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <div class="product-row"><div>Special Bundle</div><div class="price">Rp 100.000</div><div><button class="btn btn-sm btn-buy" onclick="buy('Special Bundle','100000')">Beli</button></div></div>
+        </div>
+      </div>
+    </div>
+  </div>  <!-- Exclusive Modal -->  <div class="modal fade" id="modal-exclusive" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Exclusive Item - Harga</h5>
+          <button class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <div class="product-row"><div>Exclusive Item</div><div class="price">Rp 250.000</div><div><button class="btn btn-sm btn-buy" onclick="buy('Exclusive Item','250000')">Beli</button></div></div>
+        </div>
+      </div>
+    </div>
+  </div>  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>  <script>
+    // WA target number (international without +)
+    const WA_NUMBER = '6282178341723';
 
-<!-- Gold Category -->
-<div class="category-card mb-4">
-  <img src="https://raw.githubusercontent.com/santaidoong-design/SOF-Database.sql/refs/heads/main/images%20(18).jpeg" class="img-fluid mb-3" alt="Gold">
-  <h4 class="fw-bold text-secondary">💰 Gold</h4>
-  <div class="product-item d-flex justify-content-between align-items-center">
-    <span>Gold Pack 100</span>
-    <button class="whatsapp-btn" onclick="order('Gold Pack 100', 'Rp5.000')">Beli</button>
-  </div>
-  <div class="product-item d-flex justify-content-between align-items-center">
-    <span>Gold Pack 1000</span>
-    <button class="whatsapp-btn" onclick="order('Gold Pack 1000', 'Rp40.000')">Beli</button>
-  </div>
-</div>
-
-<!-- Lainnya Category -->
-<div class="category-card mb-4">
-  <img src="https://raw.githubusercontent.com/santaidoong-design/SOF-Database.sql/refs/heads/main/20251007_091700.jpg" class="img-fluid mb-3" alt="Lainnya">
-  <h4 class="fw-bold text-secondary">🛍️ Lainnya</h4>
-  <div class="product-item d-flex justify-content-between align-items-center">
-    <span>Special Bundle</span>
-    <button class="whatsapp-btn" onclick="order('Special Bundle', 'Rp100.000')">Beli</button>
-  </div>
-  <div class="product-item d-flex justify-content-between align-items-center">
-    <span>Exclusive Item</span>
-    <button class="whatsapp-btn" onclick="order('Exclusive Item', 'Rp250.000')">Beli</button>
-  </div>
-</div>
-
-<footer class="text-center mt-5 mb-3 text-muted">
-  <small>© 2025 MYSTHAVEN TOPUP — All Rights Reserved</small>
-</footer>
-
-  </div>  <script>
-    function order(product, price) {
-      const message = `Order TopUp MYSTHAVEN%0AProduk: ${product}%0AHarga: ${price}%0ANama: %0AID: %0AMetode Pembayaran: %0A`;
-      window.open(`https://wa.me/6282178341723?text=${message}`, '_blank');
+    function buy(productName, price) {
+      // open modal to ask for name/ID or directly open WA with template
+      const name = prompt('Nama / Nick in game (isi untuk order):');
+      const id = prompt('ID Game / UID (opsional):');
+      const method = prompt('Metode Pembayaran (contoh: Dana / Transfer / OVO):');
+      if(name === null) return; // user cancelled
+      const msg = `Order TopUp MYSTHAVEN%0AProduk: ${encodeURIComponent(productName)}%0AHarga: Rp ${price}%0ANama: ${encodeURIComponent(name)}%0AID: ${encodeURIComponent(id||'-')}%0AMetode: ${encodeURIComponent(method||'-')}`;
+      const url = `https://wa.me/${WA_NUMBER}?text=${msg}`;
+      window.open(url, '_blank');
     }
   </script></body>
-  </html>
+                                                                                                          </html>
